@@ -1,18 +1,24 @@
-const endpoint = "http://economia.awesomeapi.com.br/json/last/USD-BRL"
+const endpoint = "http://economia.awesomeapi.com.br/json/last/USD-BRL";
+const text = document.getElementById("text");
+let formato; // Variável global para armazenar o formato da cotação
 
 fetch(endpoint)
     .then(response => {
-        if (!response.ok){
+        if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
-    return response.json();
-})
+        return response.json();
+    })
+    .then(dados => {
+        const cotacaoDolarReal = parseFloat(dados.USDBRL.bid);
+        formato = cotacaoDolarReal.toFixed(2);
+        console.log(`A cotação de hoje do valor do Dólar para Real é: ${formato}`);
+    })
+    .catch(erro => {
+        console.log(`Não consegui fazer a operação`, erro);
+    });
 
-.then(dados => {
-    const DopRe = parseFloat(dados.USDBRL.bid);
-    const formato = DopRe.toFixed(2);
-    console.log(` a cotaçao de hoje do valor do Dolar para Real e: ${formato}`) 
-})
-.catch(erro => {
-    console.log(`Nao conseguir fazer a operaçao`, erro);
-});
+// Função para atualizar o conteúdo do elemento <p id="text">
+function gerar() {
+    text.innerHTML = formato;
+}
